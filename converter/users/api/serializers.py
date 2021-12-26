@@ -11,7 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["username", "convert_min_left", "url", "name", "password"]
+        fields = ["username", "convert_min_left", "name", "password"]
         required_fields = ["username", "password"]
         read_only_fields = [
             "convert_min_left",
