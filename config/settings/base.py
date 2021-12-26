@@ -139,6 +139,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.common.BrokenLinkEmailsMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "converter.users.convert_charge_middleware.ConvertChargeMiddleware",
 ]
 
 # STATIC
