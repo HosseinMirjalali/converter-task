@@ -22,3 +22,18 @@ def test_user_list():
 def test_user_me():
     assert reverse("api:user-me") == "/api/users/me/"
     assert resolve("/api/users/me/").view_name == "api:user-me"
+
+
+def test_token_obtain_pair():
+    assert reverse("users:token_obtain_pair") == "/users/api/token/"
+    assert resolve("/users/api/token/").view_name == "users:token_obtain_pair"
+
+
+def test_token_refresh():
+    assert reverse("users:token_refresh") == "/users/api/token/refresh/"
+    assert resolve("/users/api/token/refresh/").view_name == "users:token_refresh"
+
+
+def test_create():
+    assert reverse("users:create") == "/users/api/create/"
+    assert resolve("/users/api/create/").view_name == "users:create"

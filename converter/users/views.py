@@ -51,5 +51,9 @@ user_redirect_view = UserRedirectView.as_view()
 class CreateUserView(generics.CreateAPIView):
     """Create a new user"""
 
+    model = User
     serializer_class = UserSerializer
     permission_classes = (permissions.AllowAny,)
+
+
+create_user_view = CreateUserView.as_view()
