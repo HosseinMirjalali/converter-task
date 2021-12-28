@@ -11,6 +11,7 @@ from rest_framework.response import Response
 
 from converter.video.api.serializer import VideoConvertedSerializer, VideoRawSerializer
 from converter.video.models import VideoConverted, VideoRaw
+from converter.video.tasks import convert_video_task
 
 
 class VideoRawCreateAPIView(CreateAPIView):
@@ -25,7 +26,8 @@ class VideoRawCreateAPIView(CreateAPIView):
         if serializer.is_valid():
             serializer.validated_data["user"] = request.user
             obj = serializer.save()
-            VideoConverted.objects.create(user=request.user, raw=obj)
+            conv = VideoConverted.objects.create(user=request.user, raw=obj)
+            convert_video_task(obj.uuid, conv.uuid)
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
