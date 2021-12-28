@@ -27,7 +27,7 @@ class VideoRawCreateAPIView(CreateAPIView):
             serializer.validated_data["user"] = request.user
             obj = serializer.save()
             conv = VideoConverted.objects.create(user=request.user, raw=obj)
-            convert_video_task(obj.uuid, conv.uuid)
+            convert_video_task(obj.uuid, conv.uuid, request.user.username)
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

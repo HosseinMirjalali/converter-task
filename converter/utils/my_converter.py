@@ -1,12 +1,15 @@
 import os
 import shutil
-from django.conf import settings
+import subprocess
+import uuid
+
 import ffmpeg
+from django.conf import settings
 
-from converter.video.models import VideoRaw, VideoConverted
+from converter.video.models import VideoConverted, VideoRaw
 
 
-def convert(raw_uuid, conv_uuid):
+def convert(raw_uuid: uuid, conv_uuid: uuid) -> VideoConverted:
     """
     A simple converter function that uses ffmpeg wrapper package to execute ffmpeg commands.
     First extracts the given objects' (see params) information from database,
@@ -15,7 +18,7 @@ def convert(raw_uuid, conv_uuid):
     according to its destination format with proper codecs
     :param raw_uuid: uuid of the VideoRaw object created in view (as passed by the task)
     :param conv_uuid: uuid of the VideoConverted object created in view (as passed by the task)
-    :return:
+    :return: conv_obj of VideoConverted type
     """
 
     raw_obj = VideoRaw.objects.get(uuid=raw_uuid)
@@ -25,35 +28,42 @@ def convert(raw_uuid, conv_uuid):
     stream = ffmpeg.input(raw_obj.file.path)
     if req_format == "3gp":
         stream = ffmpeg.output(
-            stream,
-            output_filename,
-            vcodec="h263",
-            acodec="aac",
-            s="704x576"
+            stream, output_filename, vcodec="h263", acodec="aac", s="704x576"
         )
     elif req_format == "mkv":
-        stream = ffmpeg.output(
-            stream,
-            output_filename,
-            vcodec="libvpx"
-        )
+        stream = ffmpeg.output(stream, output_filename, vcodec="libvpx")
     elif req_format == "avi":
-        stream = ffmpeg.output(
-            stream,
-            output_filename,
-            vcodec="mpeg4"
-        )
+        stream = ffmpeg.output(stream, output_filename, vcodec="mpeg4")
     elif req_format == "mp4":
-        stream = ffmpeg.output(
-            stream,
-            output_filename,
-            vcodec="mpeg4"
-        )
+        stream = ffmpeg.output(stream, output_filename, vcodec="mpeg4")
     ffmpeg.run(stream)
     # copy the new file to media inside "converted_videos" directory, and then delete the file (here, the conversion
     # process has finished and the raw file is not needed anymore.)
-    shutil.copy2(output_filename, f"{settings.MEDIA_ROOT}/converted_videos/{output_filename}")
+    shutil.copy2(
+        output_filename, f"{settings.MEDIA_ROOT}/converted_videos/{output_filename}"
+    )
     os.remove(raw_obj.file.path)
     os.remove(output_filename)
     conv_obj.file = f"converted_videos/{output_filename}"
     conv_obj.save()
+    return conv_obj
+
+
+def get_length(filename):
+    result = subprocess.run(
+        [
+            "ffprobe",
+            "-v",
+            "error",
+            "-show_entries",
+            "format=duration",
+            "-of",
+            "default=noprint_wrappers=1:nokey=1",
+            filename,
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    print(float(result.stdout))
+    return float(result.stdout)
