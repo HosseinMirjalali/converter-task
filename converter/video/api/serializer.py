@@ -16,5 +16,5 @@ class VideoConvertedSerializer(serializers.ModelSerializer):
 class VideoRawSerializer(serializers.ModelSerializer):
     class Meta:
         model = VideoRaw
-        fields = ["user", "file", "uuid"]
+        fields = ["user", "file", "uuid", "req_format"]
         read_only_fields = ["uuid", "user"]
