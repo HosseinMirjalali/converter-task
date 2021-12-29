@@ -29,9 +29,8 @@ class VideoRawCreateAPIView(CreateAPIView):
             video_length = (
                 get_length(serializer.validated_data["file"].temporary_file_path()) / 60
             )
-            if (
-                request.user.convert_min_left < video_length
-            ):  # checks if user has enough conversion charge
+            # checks if user has enough conversion charge to convert the uploaded video
+            if request.user.convert_min_left < video_length:
                 return Response(
                     data="Video length exceeds your remaining charge.",
                     status=status.HTTP_400_BAD_REQUEST,
