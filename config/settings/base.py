@@ -76,6 +76,7 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     "corsheaders",
     "drf_yasg",
+    "django_cleanup.apps.CleanupConfig",  # for deleting Fielfield files after model is deleted
 ]
 
 LOCAL_APPS = [

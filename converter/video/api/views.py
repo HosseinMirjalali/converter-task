@@ -29,7 +29,9 @@ class VideoRawCreateAPIView(CreateAPIView):
             obj = serializer.save()
             conv = VideoConverted.objects.create(user=request.user, raw=obj)
             convert_video_task.apply_async(
-                args=(obj.uuid, conv.uuid, request.user.username)
+                args=(obj.uuid, conv.uuid, request.user.username),
+                countdown=1
+                # countdown is necessary as the task is async but the database transaction is not
             )
             conv_link = request.build_absolute_uri(
                 reverse("videos:download", kwargs={"uuid": conv.uuid})
