@@ -28,7 +28,9 @@ class VideoRawCreateAPIView(CreateAPIView):
             serializer.validated_data["user"] = request.user
             obj = serializer.save()
             conv = VideoConverted.objects.create(user=request.user, raw=obj)
-            convert_video_task(obj.uuid, conv.uuid, request.user.username)
+            convert_video_task.apply_async(
+                args=(obj.uuid, conv.uuid, request.user.username), countdown=60
+            )
             conv_link = request.build_absolute_uri(
                 reverse("videos:download", kwargs={"uuid": conv.uuid})
             )
@@ -50,8 +52,11 @@ class VideoConvertedRetrieveAPIView(RetrieveAPIView):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
         data = serializer.data
-        remaining_expiration_time = parser.parse(
-            data["expiration_time"]
-        ) - datetime.datetime.now(timezone.utc)
-        data["remaining_expiration_time"] = remaining_expiration_time
+        try:
+            remaining_expiration_time = parser.parse(
+                data["expiration_time"]
+            ) - datetime.datetime.now(timezone.utc)
+            data["remaining_expiration_time"] = remaining_expiration_time
+        except TypeError:
+            pass
         return Response(data)
