@@ -1,3 +1,5 @@
+import uuid
+
 from celery import shared_task
 from django.contrib.auth import get_user_model
 
@@ -8,7 +10,7 @@ User = get_user_model()
 
 
 @shared_task
-def convert_video_task(raw_uuid, conv_uuid, username):
+def convert_video_task(raw_uuid: uuid, conv_uuid: uuid, username: str):
     convert(raw_uuid, conv_uuid)  # run the conversion
     user = User.objects.get(username=username)
     video_length = get_length(

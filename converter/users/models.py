@@ -13,7 +13,7 @@ class User(AbstractUser):
     last_name = None  # type: ignore
     convert_min_left = FloatField(
         _("How many minutes of video user can convert"), default=1000
-    )
+    )  # the charge this user has left for conversion, in minutes.
 
     def get_absolute_url(self):
         """Get url for user's detail view.

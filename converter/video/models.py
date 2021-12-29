@@ -1,4 +1,3 @@
-import os.path
 import uuid as uuid_lib
 
 from django.contrib.auth import get_user_model
@@ -10,6 +9,11 @@ User = get_user_model()
 
 
 class VideoRaw(models.Model):
+    """
+    This model represents the structure for the video the user uploads for conversion
+    """
+
+    # possible formats that we can convert, with extra information
     REQUESTED_FORMAT_CHOICES = [
         ("mp4", "mp4, using mpeg4 codec"),
         ("avi", "avi, using mpeg4 codec"),
@@ -33,10 +37,6 @@ class VideoRaw(models.Model):
 
     def __str__(self):
         return "%s" % self.uuid
-
-    @property
-    def filename(self):
-        return os.path.basename(self.file.name)
 
 
 class VideoConverted(models.Model):

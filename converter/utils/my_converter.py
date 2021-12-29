@@ -49,7 +49,12 @@ def convert(raw_uuid: uuid, conv_uuid: uuid) -> VideoConverted:
     return conv_obj
 
 
-def get_length(filename):
+def get_length(filename: str) -> float:
+    """
+    using ffprobe, gets the given file's duration in seconds
+    :param filename: given by task
+    :return: return the result in float
+    """
     result = subprocess.run(
         [
             "ffprobe",
