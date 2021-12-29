@@ -10,6 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 
+from converter.utils.my_converter import get_length
 from converter.video.api.serializer import VideoConvertedSerializer, VideoRawSerializer
 from converter.video.models import VideoConverted, VideoRaw
 from converter.video.tasks import convert_video_task
@@ -25,6 +26,16 @@ class VideoRawCreateAPIView(CreateAPIView):
         serializer = VideoRawSerializer(data=request.data)
 
         if serializer.is_valid():
+            video_length = (
+                get_length(serializer.validated_data["file"].temporary_file_path()) / 60
+            )
+            if (
+                request.user.convert_min_left < video_length
+            ):  # checks if user has enough conversion charge
+                return Response(
+                    data="Video length exceeds your remaining charge.",
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             serializer.validated_data["user"] = request.user
             obj = serializer.save()
             conv = VideoConverted.objects.create(user=request.user, raw=obj)
