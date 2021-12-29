@@ -1,7 +1,9 @@
+import datetime
 import os
 import shutil
 import subprocess
 import uuid
+from datetime import timedelta
 
 import ffmpeg
 from django.conf import settings
@@ -45,6 +47,8 @@ def convert(raw_uuid: uuid, conv_uuid: uuid) -> VideoConverted:
     os.remove(raw_obj.file.path)
     os.remove(output_filename)
     conv_obj.file = f"converted_videos/{output_filename}"
+    two_days = datetime.datetime.now() + timedelta(days=2)
+    conv_obj.expiration_time = two_days
     conv_obj.save()
     return conv_obj
 
