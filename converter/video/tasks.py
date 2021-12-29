@@ -20,15 +20,13 @@ def convert_video_task(raw_uuid: uuid, conv_uuid: uuid, username: str):
     video_length /= 60  # divide by 60 for seconds
     user.convert_min_left -= video_length  # deduct from user's total remaining charge
     user.save()
-    pass
 
 
 @shared_task
 def delete_expired_converted_video_task():
     """
     query VideoConverted model and delete those objects that are expired
-    :return:
+    (files are also deleted because of django-cleanup package)
     """
     now = datetime.datetime.now()
     VideoConverted.objects.filter(expiration_time__lte=now).delete()
-    pass
