@@ -64,6 +64,4 @@ def get_length(filename):
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
     )
-    print("@@@@@@@@@@@@@@@@@@@@@@@@@@")
-    print(float(result.stdout))
     return float(result.stdout)
