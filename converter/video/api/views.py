@@ -3,6 +3,7 @@ from datetime import timezone
 from typing import Any
 
 from dateutil import parser
+from django.urls import reverse
 from rest_framework import status
 from rest_framework.generics import CreateAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -28,7 +29,14 @@ class VideoRawCreateAPIView(CreateAPIView):
             obj = serializer.save()
             conv = VideoConverted.objects.create(user=request.user, raw=obj)
             convert_video_task(obj.uuid, conv.uuid, request.user.username)
-            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+            conv_link = request.build_absolute_uri(
+                reverse("videos:download", kwargs={"uuid": conv.uuid})
+            )
+            response = (
+                "Please be patient while we convert the video to your requested format."
+                f" Visit {conv_link} and wait until your file is ready for download."
+            )
+            return Response(data=response, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
