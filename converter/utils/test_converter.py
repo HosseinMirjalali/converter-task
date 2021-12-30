@@ -87,7 +87,7 @@ class TestUploadVideoView(TestCase):
         conversion = convert(raw_obj_mp4.uuid, conv_obj_mp4.uuid)
         stream = ffmpeg.probe(conversion.file.path, v="quiet")
         self.assertEqual(stream["streams"][0]["codec_type"], "video")
-        self.assertEqual(stream["streams"][0]["codec_name"], "mpeg4")
+        self.assertEqual(stream["streams"][0]["codec_name"], "h264")
 
     @pytest.mark.conversion
     def test_convert_mp4_to_avi(self):
@@ -151,7 +151,7 @@ class TestUploadVideoView(TestCase):
         conversion = convert(raw_obj_mp4.uuid, conv_obj_mp4.uuid)
         stream = ffmpeg.probe(conversion.file.path, v="quiet")
         self.assertEqual(stream["streams"][0]["codec_type"], "video")
-        self.assertEqual(stream["streams"][0]["codec_name"], "mpeg4")
+        self.assertEqual(stream["streams"][0]["codec_name"], "h264")
 
     @pytest.mark.conversion
     def test_convert_avi_to_avi(self):
@@ -215,7 +215,7 @@ class TestUploadVideoView(TestCase):
         conversion = convert(raw_obj_mp4.uuid, conv_obj_mp4.uuid)
         stream = ffmpeg.probe(conversion.file.path, v="quiet")
         self.assertEqual(stream["streams"][0]["codec_type"], "video")
-        self.assertEqual(stream["streams"][0]["codec_name"], "mpeg4")
+        self.assertEqual(stream["streams"][0]["codec_name"], "h264")
 
     @pytest.mark.conversion
     def test_convert_mkv_to_avi(self):
@@ -279,7 +279,7 @@ class TestUploadVideoView(TestCase):
         conversion = convert(raw_obj_mp4.uuid, conv_obj_mp4.uuid)
         stream = ffmpeg.probe(conversion.file.path, v="quiet")
         self.assertEqual(stream["streams"][0]["codec_type"], "video")
-        self.assertEqual(stream["streams"][0]["codec_name"], "mpeg4")
+        self.assertEqual(stream["streams"][0]["codec_name"], "h264")
 
     @pytest.mark.conversion
     def test_convert_3gp_to_avi(self):

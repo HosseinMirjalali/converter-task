@@ -15,7 +15,7 @@ class VideoRaw(models.Model):
 
     # possible formats that we can convert, with extra information
     REQUESTED_FORMAT_CHOICES = [
-        ("mp4", "mp4, using mpeg4 codec"),
+        ("mp4", "mp4, using libx264 codec"),
         ("avi", "avi, using mpeg4 codec"),
         ("mkv", "mkv, using libvpx codec"),
         ("3gp", "3gp, using h263 codec"),

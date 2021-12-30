@@ -37,7 +37,7 @@ def convert(raw_uuid: uuid, conv_uuid: uuid) -> VideoConverted:
     elif req_format == "avi":
         stream = ffmpeg.output(stream, output_filename, vcodec="mpeg4")
     elif req_format == "mp4":
-        stream = ffmpeg.output(stream, output_filename, vcodec="mpeg4")
+        stream = ffmpeg.output(stream, output_filename, vcodec="libx264")
     ffmpeg.run(stream)
     # copy the new file to media inside "converted_videos" directory, and then delete the file (here, the conversion
     # process has finished and the raw file is not needed anymore.)
