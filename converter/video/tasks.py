@@ -30,3 +30,10 @@ def delete_expired_converted_video_task():
     """
     now = datetime.datetime.now()
     VideoConverted.objects.filter(expiration_time__lte=now).delete()
+    return True
+
+
+@shared_task
+def reset_users_conversion_charge():
+    User.objects.filter(convert_min_left__lt=1000).update(convert_min_left=1000)
+    return True
