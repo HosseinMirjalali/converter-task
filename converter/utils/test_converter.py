@@ -6,8 +6,9 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.files import File
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import TestCase
 from django.urls import reverse
-from rest_framework.test import APIClient, APIRequestFactory, APITestCase
+from rest_framework.test import APIClient, APIRequestFactory
 
 from converter.utils.my_converter import convert
 from converter.video.models import VideoConverted, VideoRaw
@@ -25,7 +26,7 @@ def fileUploader(filename, test_file):
     return uploaded_file
 
 
-class TestUploadVideoView(APITestCase):
+class TestUploadVideoView(TestCase):
     """
     Tests regarding the upload process through the API view
     """
