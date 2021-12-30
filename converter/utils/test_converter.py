@@ -2,6 +2,7 @@ import os
 import tempfile
 
 import ffmpeg
+import pytest
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.files import File
@@ -60,6 +61,7 @@ class TestUploadVideoView(TestCase):
         )
         self.conv_obj_general.save()
 
+    @pytest.mark.conversion
     def test_convert_general(self):
         """
         A general test with any video file converted to any format
@@ -71,6 +73,7 @@ class TestUploadVideoView(TestCase):
         self.assertEqual(stream["streams"][0]["codec_name"], "mpeg4")
 
     # Series of tests that run all the possible conversions, from all 4 formats to all 4 formats (16 cases)
+    @pytest.mark.conversion
     def test_convert_mp4_to_mp4(self):
         uploaded_file = fileUploader("vid.mp4", "sample-mp4.mp4")
         raw_obj_mp4 = VideoRaw.objects.create(
@@ -86,6 +89,7 @@ class TestUploadVideoView(TestCase):
         self.assertEqual(stream["streams"][0]["codec_type"], "video")
         self.assertEqual(stream["streams"][0]["codec_name"], "mpeg4")
 
+    @pytest.mark.conversion
     def test_convert_mp4_to_avi(self):
         uploaded_file = fileUploader("vid.mp4", "sample-mp4.mp4")
         raw_obj_mp4 = VideoRaw.objects.create(
@@ -101,6 +105,7 @@ class TestUploadVideoView(TestCase):
         self.assertEqual(stream["streams"][0]["codec_type"], "video")
         self.assertEqual(stream["streams"][0]["codec_name"], "mpeg4")
 
+    @pytest.mark.conversion
     def test_convert_mp4_to_mkv(self):
         uploaded_file = fileUploader("vid.mp4", "sample-mp4.mp4")
         raw_obj_mp4 = VideoRaw.objects.create(
@@ -116,6 +121,7 @@ class TestUploadVideoView(TestCase):
         self.assertEqual(stream["streams"][0]["codec_type"], "video")
         self.assertEqual(stream["streams"][0]["codec_name"], "vp8")
 
+    @pytest.mark.conversion
     def test_convert_mp4_to_3gp(self):
         uploaded_file = fileUploader("vid.mp4", "sample-mp4.mp4")
         raw_obj_mp4 = VideoRaw.objects.create(
@@ -131,6 +137,7 @@ class TestUploadVideoView(TestCase):
         self.assertEqual(stream["streams"][0]["codec_type"], "video")
         self.assertEqual(stream["streams"][0]["codec_name"], "h263")
 
+    @pytest.mark.conversion
     def test_convert_avi_to_mp4(self):
         uploaded_file = fileUploader("vid.avi", "sample-avi.avi")
         raw_obj_mp4 = VideoRaw.objects.create(
@@ -146,6 +153,7 @@ class TestUploadVideoView(TestCase):
         self.assertEqual(stream["streams"][0]["codec_type"], "video")
         self.assertEqual(stream["streams"][0]["codec_name"], "mpeg4")
 
+    @pytest.mark.conversion
     def test_convert_avi_to_avi(self):
         uploaded_file = fileUploader("vid.avi", "sample-avi.avi")
         raw_obj_mp4 = VideoRaw.objects.create(
@@ -161,6 +169,7 @@ class TestUploadVideoView(TestCase):
         self.assertEqual(stream["streams"][0]["codec_type"], "video")
         self.assertEqual(stream["streams"][0]["codec_name"], "mpeg4")
 
+    @pytest.mark.conversion
     def test_convert_avi_to_mkv(self):
         uploaded_file = fileUploader("vid.avi", "sample-avi.avi")
         raw_obj_mp4 = VideoRaw.objects.create(
@@ -176,6 +185,7 @@ class TestUploadVideoView(TestCase):
         self.assertEqual(stream["streams"][0]["codec_type"], "video")
         self.assertEqual(stream["streams"][0]["codec_name"], "vp8")
 
+    @pytest.mark.conversion
     def test_convert_avi_to_3gp(self):
         uploaded_file = fileUploader("vid.avi", "sample-avi.avi")
         raw_obj_mp4 = VideoRaw.objects.create(
@@ -191,6 +201,7 @@ class TestUploadVideoView(TestCase):
         self.assertEqual(stream["streams"][0]["codec_type"], "video")
         self.assertEqual(stream["streams"][0]["codec_name"], "h263")
 
+    @pytest.mark.conversion
     def test_convert_mkv_to_mp4(self):
         uploaded_file = fileUploader("vid.mkv", "sample-mkv.mkv")
         raw_obj_mp4 = VideoRaw.objects.create(
@@ -206,6 +217,7 @@ class TestUploadVideoView(TestCase):
         self.assertEqual(stream["streams"][0]["codec_type"], "video")
         self.assertEqual(stream["streams"][0]["codec_name"], "mpeg4")
 
+    @pytest.mark.conversion
     def test_convert_mkv_to_avi(self):
         uploaded_file = fileUploader("vid.mkv", "sample-mkv.mkv")
         raw_obj_mp4 = VideoRaw.objects.create(
@@ -221,6 +233,7 @@ class TestUploadVideoView(TestCase):
         self.assertEqual(stream["streams"][0]["codec_type"], "video")
         self.assertEqual(stream["streams"][0]["codec_name"], "mpeg4")
 
+    @pytest.mark.conversion
     def test_convert_mkv_to_mkv(self):
         uploaded_file = fileUploader("vid.mkv", "sample-mkv.mkv")
         raw_obj_mp4 = VideoRaw.objects.create(
@@ -236,6 +249,7 @@ class TestUploadVideoView(TestCase):
         self.assertEqual(stream["streams"][0]["codec_type"], "video")
         self.assertEqual(stream["streams"][0]["codec_name"], "vp8")
 
+    @pytest.mark.conversion
     def test_convert_mkv_to_3gp(self):
         uploaded_file = fileUploader("vid.mkv", "sample-mkv.mkv")
         raw_obj_mp4 = VideoRaw.objects.create(
@@ -251,6 +265,7 @@ class TestUploadVideoView(TestCase):
         self.assertEqual(stream["streams"][0]["codec_type"], "video")
         self.assertEqual(stream["streams"][0]["codec_name"], "h263")
 
+    @pytest.mark.conversion
     def test_convert_3gp_to_mp4(self):
         uploaded_file = fileUploader("vid.3gp", "sample-3gp.3gp")
         raw_obj_mp4 = VideoRaw.objects.create(
@@ -266,6 +281,7 @@ class TestUploadVideoView(TestCase):
         self.assertEqual(stream["streams"][0]["codec_type"], "video")
         self.assertEqual(stream["streams"][0]["codec_name"], "mpeg4")
 
+    @pytest.mark.conversion
     def test_convert_3gp_to_avi(self):
         uploaded_file = fileUploader("vid.3gp", "sample-3gp.3gp")
         raw_obj_mp4 = VideoRaw.objects.create(
@@ -281,6 +297,7 @@ class TestUploadVideoView(TestCase):
         self.assertEqual(stream["streams"][0]["codec_type"], "video")
         self.assertEqual(stream["streams"][0]["codec_name"], "mpeg4")
 
+    @pytest.mark.conversion
     def test_convert_3gp_to_mkv(self):
         uploaded_file = fileUploader("vid.3gp", "sample-3gp.3gp")
         raw_obj_mp4 = VideoRaw.objects.create(
@@ -296,6 +313,7 @@ class TestUploadVideoView(TestCase):
         self.assertEqual(stream["streams"][0]["codec_type"], "video")
         self.assertEqual(stream["streams"][0]["codec_name"], "vp8")
 
+    @pytest.mark.conversion
     def test_convert_3gp_to_3gp(self):
         uploaded_file = fileUploader("vid.3gp", "sample-3gp.3gp")
         raw_obj_mp4 = VideoRaw.objects.create(
