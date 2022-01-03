@@ -34,6 +34,14 @@ docker-compose -f local.yml run --rm django pytest
 docker-compose -f local.yml run --rm django pytest -v -m conversion
 ```
 
+پس از ساخت اکانت ادمین توسط دستور زیر
+
+```sh
+docker-compose -f local.yml run --rm django python manage.py createsuperuser
+```
+در آدرس زیر ۲ تسک delete_expired_converted_video_task و reset_users_conversion_charge را با اینتروال دلخواه بسازید. 
+http://localhost:8000/admin/django_celery_beat/periodictask/add
+
 ## توضیحات بیشتر
 برای آزمایش دستی کانورت ها [4 فایل سمپل](https://github.com/HosseinMirjalali/converter-task/tree/master/converter/test_video_files) در فایل های پروژه وجود دارد. (تست های کانورت نیز با همین فایل ها اجرا می شوند)<br />
 احراز حویت jwt با استفاده از پکیج  [djangorestframework-simplejwt](https://github.com/jazzband/djangorestframework-simplejwt)
